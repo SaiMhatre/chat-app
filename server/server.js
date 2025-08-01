@@ -41,7 +41,8 @@ app.use(express.json({limit: '4mb'}));
 app.use(cors({
     origin: (origin, callback) => {
         const allowedOrigins = [
-            'http://localhost:5173'
+            'http://localhost:5173',
+            'https://chat-app-phi-two-68.vercel.app'
         ];
         
         // Allow Vercel preview deployments
