@@ -39,10 +39,23 @@ io.on("connection", (socket) => {
 // Middleware setup
 app.use(express.json({limit: '4mb'}));
 app.use(cors({
-    origin: [
-        'https://chat-app-phi-two-68.vercel.app',
-        'http://localhost:5173'
-    ],
+    origin: (origin, callback) => {
+        const allowedOrigins = [
+            'http://localhost:5173'
+        ];
+        
+        // Allow Vercel preview deployments
+        if (origin && origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+        
+        // Allow specific origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        return callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
 
