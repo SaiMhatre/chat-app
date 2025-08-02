@@ -43,17 +43,13 @@ app.use(cors({
         const allowedOrigins = [
             'http://localhost:5173'
         ];
-        
-        // Allow Vercel preview deployments
-        if (origin && origin.includes('vercel.app')) {
-            return callback(null, true);
+        // Allow Vercel preview and production deployments
+        if (origin && origin.endsWith('.vercel.app')) {
+            return callback(null, origin);
         }
-        
-        // Allow specific origins
         if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, true);
+            return callback(null, origin);
         }
-        
         return callback(new Error('Not allowed by CORS'));
     },
     credentials: true
