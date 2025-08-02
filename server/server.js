@@ -39,19 +39,7 @@ io.on("connection", (socket) => {
 // Middleware setup
 app.use(express.json({limit: '4mb'}));
 app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = [
-            'http://localhost:5173'
-        ];
-        // Allow Vercel preview and production deployments
-        if (origin && origin.endsWith('.vercel.app')) {
-            return callback(null, origin);
-        }
-        if (!origin || allowedOrigins.includes(origin)) {
-            return callback(null, origin);
-        }
-        return callback(new Error('Not allowed by CORS'));
-    },
+    origin: "*", // Allow all origins - only use for testing
     credentials: true
 }));
 
