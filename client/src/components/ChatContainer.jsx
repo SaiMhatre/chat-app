@@ -18,6 +18,7 @@ const ChatContainer = () => {
     const scrollEnd = useRef();
 
     const [input, setInput] = useState('');
+    const [uploading, setUploading] = useState(false);
 
     const handleSendMessage = async (e) => {
         e.preventDefault();
@@ -33,10 +34,12 @@ const ChatContainer = () => {
             toast.error('Select an image file');
             return;
         }
+        setUploading(true);
         const reader = new FileReader();
         reader.onloadend = async() => {
             await sendMessage({image: reader.result});
-            e.target.value = ''; // Clear the input after sending
+            setUploading(false);
+            e.target.value = '';
         };
         reader.readAsDataURL(file);
     };
@@ -57,7 +60,7 @@ const ChatContainer = () => {
     <div className='h-full overflow-scroll relative backdrop-blur-lg'>
         {/* header  */}
         <div className='flex items-center gap-3 py-3 mx-4 border-b border-stone-500'>
-            <img src={selectedUser?.profilePicture || assets.avatar_icon} alt="" className='w-8 rounded-full'/>
+            <img src={selectedUser?.profilePicture || assets.avatar_icon} alt="" className='w-8 rounded-full aspect-[1/1] object-cover'/>
             <p className='flex-1 text-lg text-white flex items-center gap-2'>
                 {selectedUser?.fullName}
                 {onlineUsers.includes(selectedUser?._id) && (
@@ -88,6 +91,17 @@ const ChatContainer = () => {
                     </div>
                 </div>
             ))}
+            {uploading && (
+                <div className="flex items-end gap-2 justify-end">
+                    <div className="max-w-[230px] min-w-[120px] min-h-[120px] h-[120px] flex items-center justify-center border border-gray-700 rounded-lg overflow-hidden mb-8 bg-violet-500/30">
+                        <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <div className='text-center text-xs'>
+                        <img src={authUser?.profilePicture || assets.avatar_icon} alt='' className='w-7 rounded-full'/>
+                        <p className='text-gray-500'>Uploading...</p>
+                    </div>
+                </div>
+            )}
             <div ref={scrollEnd}></div>
         </div>
 

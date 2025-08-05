@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
                 toast.error(data.message);
             }
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.response.data.message);
             console.error('Error logging in:', error);
         }
     }
